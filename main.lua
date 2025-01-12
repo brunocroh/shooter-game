@@ -1,5 +1,7 @@
 local Player = require 'player'
 local Enemy = require 'enemy'
+local Bullet = require 'bullet'
+local bullets = {}
 
 function love.load()
   Player:load()
@@ -10,24 +12,35 @@ end
 function love.update(dt)
   Player:update(dt)
   Enemy:update(dt)
+
+  for i = 1, #bullets do
+    bullets[i]:update(dt)
+    local hit = bullets[i]:checkCollision(Enemy)
+    if hit then
+      if Enemy.speed > 0 then
+        Enemy.speed = Enemy.speed + 50
+      else
+        Enemy.speed = Enemy.speed - 50
+      end
+      print('Enemy speed:' .. Enemy.speed)
+    end
+  end
 end
 
 function love.draw()
   Player:draw()
   Enemy:draw()
+
+  for i = 1, #bullets do
+    bullets[i]:draw()
+  end
 end
 
 
 function love.keypressed(key)
   if key == 'r' then
     love.event.quit('restart')
-    
   end
-end
 
-local function checkCollision(a, b)
-  return a.x + a.width > b.x
-    and a.x < b.x + b.width
-    and a.y + a.height > b.y
-    and a.y < b.y + b.height
+  Player:keyPressed(key, bullets)
 end
