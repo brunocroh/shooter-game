@@ -9,6 +9,7 @@ function Bullet:new(x,y)
   instance.x = x
   instance.y = y
   instance.speed = 500
+  instance.dead = false
 
   instance.width = asset:getWidth()
   instance.height = asset:getHeight()

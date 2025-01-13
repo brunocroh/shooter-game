@@ -13,10 +13,12 @@ function love.update(dt)
   Player:update(dt)
   Enemy:update(dt)
 
-  for i = 1, #bullets do
+  for i in pairs(bullets) do
     bullets[i]:update(dt)
     local hit = bullets[i]:checkCollision(Enemy)
+
     if hit then
+      table.remove(bullets, i)
       if Enemy.speed > 0 then
         Enemy.speed = Enemy.speed + 50
       else
@@ -24,7 +26,10 @@ function love.update(dt)
       end
       print('Enemy speed:' .. Enemy.speed)
     end
+
   end
+
+
 end
 
 function love.draw()
